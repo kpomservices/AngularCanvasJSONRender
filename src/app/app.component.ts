@@ -51,9 +51,16 @@ export class AppComponent implements OnInit {
     this.setActiveProp('fontSize', this.selectedFontSize);
   }
 
-  selectFontFamily(event: any) {
+
+
+  changeFontFamily(event: any) {
     this.font = event.family;
     this.setActiveProp('fontFamily', event.family);
+  }
+
+  changeTextColor(event: any) {
+    this.color = event;
+    this.setActiveProp('fill', event);
   }
 
   readJSONData() {
@@ -113,15 +120,6 @@ initCanvasEvents() {
       e.stopImmediatePropagation();
       self.selectCanvas('divcanvas' + $(this).data('id'));
   });
-}
-
-setFontFamily() {
-  this.setActiveProp('fontFamily', this.objProps.get('fontFamily'));
-  $('#fontselect').css('color', 'white');
-}
-
-setFontSize() {
-  this.setActiveProp('fontSize', this.objProps.get('fontSize'));
 }
 
 setActiveProp(name, value) {
@@ -199,8 +197,6 @@ setCanvasWidthHeight(width, height) {
   $("#canvaswidth").val(Math.round(this.canvas.getWidth()));
   $("#canvasheight").val(Math.round(this.canvas.getHeight()));
 }
-
-  
 
   addTextToCanvas() {
     const text = new fabric.Textbox('Hello, Fabric.js!', {

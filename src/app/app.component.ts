@@ -1,7 +1,7 @@
 import { Component, OnInit  } from '@angular/core';
 //import { RouterOutlet } from '@angular/router';
 import * as fabric from 'fabric';
-import * as jsonData from '../assets/design-sample-1 (1).json';
+import * as jsonData from '../assets/design-sample-1.json';
 declare var $: any;
 
 @Component({
@@ -9,6 +9,7 @@ declare var $: any;
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
+
 export class AppComponent implements OnInit {
   canvas!: fabric.Canvas;
   data: any = jsonData;
@@ -19,17 +20,12 @@ export class AppComponent implements OnInit {
   canvasarray = [];
   canvasindex: number = 0;
   currentcanvasid: number = 0;
-  // DPI = 300;
-  // DPIMultiplier = 1;
-  // A6
   canvassize: any = {
     width: 1000,
     height: 1000 
   };
-  color : string = "red";
+  color : string = "#000";
   font: any = 'Roboto';
-  //font: { family: string } = { family: 'Roboto' };
-
   fontSizes = [10, 12, 14, 16, 18, 20, 24, 28, 32, 36, 40]; // List of font sizes
   selectedFontSize = 16; // Default font size
 
@@ -45,27 +41,20 @@ export class AppComponent implements OnInit {
     $('#leftsidenav').css("width", "100px");
 }
 
-openRightNav() {
-    $('#rightsidenav').css("width", "100px");
-}
+  openRightNav() {
+      $('#rightsidenav').css("width", "100px");
+  }
 
-changeFontSize(size: number) {
-  this.selectedFontSize = size;
-  console.log(this.selectedFontSize)
-  this.setActiveProp('fontSize', this.selectedFontSize);
-}
+  changeFontSize(size: number) {
+    this.selectedFontSize = size;
+    console.log(this.selectedFontSize)
+    this.setActiveProp('fontSize', this.selectedFontSize);
+  }
 
-selectFontFamily(event: any) {
-  this.font = event.family;
-  this.setActiveProp('fontFamily', event.family);
-}
-
-changeFontFamily() {
-  console.log("ff")
-  // this.selectedFontSize = size;
-  //console.log(this.selectedFontSize)
-  // this.setActiveProp('fontSize', this.selectedFontSize);
-}
+  selectFontFamily(event: any) {
+    this.font = event.family;
+    this.setActiveProp('fontFamily', event.family);
+  }
 
   readJSONData() {
      console.log(this.data);
@@ -211,39 +200,7 @@ setCanvasWidthHeight(width, height) {
   $("#canvasheight").val(Math.round(this.canvas.getHeight()));
 }
 
-  // initCanvas() {
-  //   //console.log(imageUrl.sid)
-  //    //const zipcode = data.address?.details?.zipcode; // Using optional chaining to handle null/undefined safely
-  //    //console.log(zipcode);  // Output: 10001
-  //   this.canvas = new fabric.Canvas('canvas', {
-  //     width: 800,
-  //     height: 600,
-  //     backgroundColor: '#f0f0f0'
-  //   });
-  //   this.addCircle();
-  //   console.log('Data', this.data.p1);
-  //    const images = this.data.p1;
-  //    console.log(images);
-  //    const imageUrl = images.images;
-  //    for (const imageData of imageUrl) {
-  //     console.log(imageData.sid);
-  //     //this.loadImage(imageData.sid);
-  //     //this.addImage(imageData.sid);
-  //   }
-  // }
-
   
-
-  addCircle() {
-    const circle = new fabric.Circle({
-      left: 200,
-      top: 200,
-      fill: 'blue',
-      radius: 50
-    });
-    this.canvas.add(circle);
-
-  }
 
   addTextToCanvas() {
     const text = new fabric.Textbox('Hello, Fabric.js!', {

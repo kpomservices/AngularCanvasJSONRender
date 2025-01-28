@@ -1,0 +1,32 @@
+.template-row {
+    width: 50%;
+    height: 150px;
+    position: relative;
+    float: left;
+}
+.custom-menu {
+    position: absolute;
+    background-color: #8d939e;
+    z-index: 100000;
+    color: white;
+    padding: 10px;
+    font-size: 14px;
+    border-radius: 10px;
+    list-style-type: none;      
+}      
+.custom-menu li:hover {
+    cursor: pointer;
+    color: black;
+} 
+
+.textOptions {
+    margin: 20px 0px 20px 20px;
+}
+
+#fontSizePicker {
+    padding: 5px;
+    font-size: 14px;
+    margin-left: 10px; 
+}
+
+  

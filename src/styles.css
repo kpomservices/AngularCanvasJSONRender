@@ -1,0 +1,613 @@
+/* You can add global styles to this file, and also import other style files */
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+  }
+  html {
+    overflow: hidden;
+  }
+  .header-wrapper {
+    background: black;
+    padding: 10px 0;
+  }
+  .nav-wrap {
+    background: #00b7e1;
+  }
+  .nav li a {
+    color: #fff;
+  }
+  .nav li a:hover {
+    color: #000 !important;
+  }
+  a,button {
+    -webkit-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+  }
+  .nav li a:hover {
+    color: #fff;
+  }
+  .nav li {
+    margin: 0 5px;
+  }
+  .logo a {
+    text-transform: uppercase;
+    font-size: 20px;
+    color: #fff;
+  }
+  .logo a:hover {
+    text-decoration: none;
+  }
+  .list-group-horizontal {
+    -ms-flex-direction: row;
+    flex-direction: row;
+  }
+  .list-group {
+    display: -ms-flexbox;
+    display: flex;
+  }
+  .toolbar img {
+    width: 60px;
+    border-radius: 10px;
+    border: 1px solid #000;
+    padding: 5px;
+    background: #fff;
+  }
+  .toolbar .list-group-item {
+    padding: 5px !important;
+    border: 0 !important;
+  }
+  .toolbar {
+    -ms-flex-pack: center;
+    justify-content: center;
+    -ms-flex-align: center;
+    align-items: center;
+    position: relative;
+  }
+  .btn-wrap {
+    position: absolute;
+    right: 110px;
+    top: -60px;
+    z-index: 1;
+  }
+  .canvas-wrap, .main-area {
+    background: #fff !important;
+  }
+  .mobile-toolbar {
+    display: none;
+  }
+  /* The side navigation menu */
+  .leftsidenav {
+    height: 100%;
+   /* 100% Full-height */
+    width: 0;
+   /* 0 width - change this with JavaScript */
+    position: fixed;
+   /* Stay in place */
+    z-index: 10000;
+   /* Stay on top */
+    top: 90px;
+   /* Stay at the top */
+    left: 0;
+    background-color: #ccc;
+   /* Black*/
+    overflow-x: hidden;
+   /* Disable horizontal scroll */
+    padding-top: 60px;
+   /* Place content 60px from the top */
+    -webkit-transition: 0.5s;
+    -o-transition: 0.5s;
+    transition: 0.5s;
+   /* 0.5 second transition effect to slide in the leftsidenav */
+  }
+  /* The navigation menu links */
+  .leftsidenav a {
+    padding: 8px 8px 8px 14px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: block;
+    -webkit-transition: 0.3s;
+    -o-transition: 0.3s;
+    transition: 0.3s;
+  }
+  /* When you mouse over the navigation links, change their color */
+  .leftsidenav a:hover {
+    color: #f1f1f1;
+  }
+  /* Position and style the close button (top right corner) */
+  .leftsidenav .closebtn {
+    position: absolute;
+    top: -16px;
+    right: 0px;
+    font-size: 36px;
+    margin-left: 50px;
+  }
+  .rightsidenav {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 10000;
+    top: 90px;
+    right: 0;
+    background-color: #ccc;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
+  }
+  .rightsidenav a {
+    padding: 8px 8px 8px 14px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: block;
+    transition: 0.3s;
+  }
+  .rightsidenav a:hover {
+    color: #f1f1f1;
+  }
+  .rightsidenav .closebtn {
+    position: absolute;
+    top: -20px;
+    right: 60px;
+    font-size: 36px;
+    margin-left: 50px;
+  }
+  @media screen and (max-height: 450px) {
+    .rightsidenav {
+       padding-top: 15px;
+   }
+    .rightsidenav a {
+       font-size: 18px;
+   }
+  }
+  .toolbar.btnClick a.first-element img, .toolbar.btnClick a.last-element img {
+    border: 0 !important;
+  }
+  .toolbar.btnClick a.first-element, .toolbar.btnClick a.last-element {
+    position: absolute;
+    width: 70px;
+  }
+  .toolbar.btnClick a.first-element {
+    left: 0;
+  }
+  .toolbar.btnClick a.last-element {
+    right: 100px;
+  }
+  .LeftNav a img, .RightNav a img {
+    width: 70px;
+  }
+  .LeftNav, .RightNav {
+    -ms-flex-direction: column;
+    flex-direction: column;
+    background: #ccc;
+   /* width: 75px;
+   */
+  }
+  .menu-3 .bm-menu, .menu-2 .bm-menu {
+    padding-top: 25px !important;
+  }
+  .menu-3 .bm-cross, .menu-2 .bm-cross {
+    background: #000 !important;
+  }
+  /*.RightNav {
+    position: absolute;
+    right: 100px;
+    top: 0px;
+  }
+  */
+  .LeftNav a, .RightNav a {
+    margin-bottom: 15px;
+  }
+  .LeftNav a img, .RightNav a img {
+    width: 50px;
+    border-radius: 10px;
+    border: 1px solid #000;
+    padding: 5px;
+    background: #fff;
+  }
+  .sideMenus {
+    height: 100vh;
+  }
+  .menu-2 .bm-burger-button {
+    position: fixed;
+    width: 36px;
+    height: 22px;
+    left: 36px;
+    top: 119px;
+    left: 5px;
+  }
+  .menu-3 .bm-burger-button {
+    position: fixed;
+    width: 36px;
+    height: 22px;
+    top: 119px;
+    right: 5px;
+   /*right: 100px;
+   */
+  }
+  .menu-2 .bm-burger-bars, .menu-3 .bm-burger-bars {
+    background: #00b7e1;
+  }
+  .menu-2 .bm-menu-wrap {
+    top: 90px !important;
+  }
+  .menu-2 {
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+  .menu-2 .bm-overlay {
+    display: none !important;
+  }
+  .menu-1 .bm-cross-button {
+    display: none;
+  }
+  .menu-3 .bm-menu-wrap, .menu-2 .bm-menu-wrap, .menu-1 .bm-menu-wrap {
+    background: #ccc;
+  }
+  /* width */
+  .menu-3 .bm-menu::-webkit-scrollbar {
+    width: 8px;
+  }
+  /* Track */
+  .menu-3 .bm-menu::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+  /* Handle */
+  .menu-3 .bm-menu::-webkit-scrollbar-thumb {
+    background: #888;
+  }
+  /* Handle on hover */
+  .menu-3 .bm-menu::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+  /* media starts */
+  @media (max-width: 780px) {
+    .btn-wrap {
+        right: 90px;
+   }
+  }
+  @media (max-width: 767px) {
+    .mobile-toolbar {
+        display: block;
+   }
+    .desktop-toolbar {
+        display: none;
+   }
+    .mobile-toolbar .list-group {
+        -ms-flex-pack: center;
+        justify-content: center;
+   }
+    .bm-item-list {
+        height: auto !important;
+   }
+    .bm-menu-wrap {
+        overflow-y: scroll;
+   }
+  }
+  @media (max-width: 700px) {
+    .btn-wrap {
+        position: relative;
+        top: -110px;
+        left: 0;
+   }
+    .btn-secondary {
+        color: #000;
+        background-color: transparent;
+        border-color: transparent;
+   }
+    .menu-3 .bm-burger-button {
+        right: 15px;
+   }
+    .toolbar img {
+        width: 60px;
+   }
+    .menu-3 .bm-menu-wrap {
+        width: 80px !important;
+   }
+    .RightNav {
+        right: 15px;
+   }
+    .menu-2 .bm-burger-button {
+        left: 15px;
+   }
+  }
+  @media (max-width: 510px) {
+    .toolbar .list-group-item {
+        padding: 5px 2px !important;
+   }
+    .btn-wrap {
+        width: 50%;
+   }
+    .menu-2 .bm-burger-button {
+        left: 15px;
+        top: 110px;
+   }
+    .menu-3 .bm-burger-button {
+        top: 110px;
+   }
+    .RightNav {
+        right: 10px;
+   }
+    .toolbar img {
+        width: 50px;
+   }
+  }
+  @media (max-width: 420px) {
+    .nav-wrap.row .nav-link {
+        padding: .5rem;
+   }
+    .nav li {
+        margin: 0;
+   }
+    .btn-wrap .btn {
+        padding: .375rem .25rem;
+   }
+  }
+  @media (max-width: 350px) {
+    .nav-wrap.row .nav-link {
+        padding: .5rem .3rem;
+   }
+    .btn-wrap .btn {
+        padding: .375rem 0;
+   }
+    .btn-wrap {
+        top: -99px;
+   }
+    .btn-wrap button:first-child {
+        margin-right: 5px;
+   }
+    .menu-2 .bm-burger-button {
+        width: 30px;
+        left: 5px;
+   }
+    .menu-3 .bm-burger-button {
+        width: 30px;
+        right: 5px;
+   }
+    .toolbar img {
+        width: 45px;
+   }
+  }
+  @media (max-width: 340px) {
+    .btn-wrap .btn, .nav-wrap.row .nav-link {
+        font-size: 15px;
+   }
+    .btn-wrap {
+        top: -95px;
+   }
+  }
+  @media (max-width: 330px) {
+    .toolbar img {
+       /*width: 38px;
+       */
+        width: 35px;
+   }
+  }
+  @media (max-width: 320px) {
+    .menu-2 .bm-burger-button, .menu-3 .bm-burger-button {
+        top: 100px;
+   }
+  }
+  .LeftNav, .RightNav {
+   padding-bottom: 100px;
+  }
+  *:focus {
+    outline: none !important 
+  }
+  .canvas-wrap {
+    background: #f3f3f3;
+  }
+  /*.toolbar {
+    overflow: auto;
+  }
+  */
+  .btnClick img.active {
+    border:3px solid #0056b3;
+  }
+  .drawRoombtn img.active {
+    border:3px solid #0056b3;
+  }
+  .addNodebtn img.active {
+    border:3px solid #0056b3;
+  }
+  .snapFreebtn img.active {
+    border:3px solid #0056b3;
+  }
+  .measClickbtn img.active {
+    border:3px solid #0056b3;
+  }
+  .templateImg {
+    width: 50%;
+   padding: 5px;
+   border:1px solid;
+   float: left;
+   height: 150px;
+  }
+  .template-row {
+    width:50%;
+    height:150px;
+    position:relative;
+    float: left;
+  }
+  .template {
+    width:100%;
+    height:100%;
+  }
+  .templateDelete {
+    display: block;
+    width: 30px;
+    height: 24px;
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+  }
+  .main-area {
+   background-color: #f3f3f3;
+   height: 100vh;
+  }
+  .header {
+   border-bottom: 1px solid #ececec;
+   width: 100%;
+  }
+  .first-left {
+   text-align: center;
+   border-right: 1px solid #ececec;
+  }
+  .header-bar {
+   padding: 0;
+  }
+  .header-bar .nav-item {
+   line-height: 34px;
+   padding: 10px;
+   border-left: 1px solid #ececec;
+  }
+  .header-bar .nav-item:last-child {
+   padding-right: 0;
+  }
+  .header-bar .nav-item .nav-link {
+   color: #525a81;
+  }
+  .left-link .nav-link {
+   color: #4e567e;
+   font-size: 20px;
+  }
+  .edit-box h1 {
+   margin: 0;
+  }
+  .edit-box {
+   border-bottom: 1px solid #ececec;
+   margin: 0 -15px;
+   padding: 10px;
+   min-height: 100px;
+  }
+  .text-editer {
+   text-align: center;
+   padding-top: 30px;
+   color: #535b82;
+   font-weight: 600;
+  }
+  .big-title {
+   font-weight: 600;
+    cursor: pointer;
+  }
+  .sub-title {
+   font-weight: 600;
+    cursor: pointer;
+  }
+  .first-title {
+   font-weight: normal;
+  }
+  .text {
+   cursor: pointer;
+  }
+  .icons {
+    height: 40px;
+    width:50px;
+    border: 1px solid;
+    float: left;
+  }
+  .option {
+    margin-top: 10px;
+    margin-left: 15px;
+  }
+  /* Position and sizing of burger button */
+  .bm-burger-button {
+    position: fixed;
+    width: 30px;
+    height: 24px;
+    right: 15px;
+    top: 15px;
+  }
+  .btn-wrap {
+    margin-top: 10px;
+  }
+  .btn-wrap button:first-child {
+    margin-right: 10px;
+  }
+  /* Color/shape of burger icon bars */
+  .bm-burger-bars {
+    background: #fff;
+  }
+  /* Color/shape of burger icon bars on hover*/
+  .bm-burger-bars-hover, .bm-burger-bars:focus {
+    background: #fff;
+    border: 0;
+    outline: none;
+  }
+  /* Position and sizing of clickable cross button */
+  .bm-cross-button {
+    height: 24px;
+    width: 24px;
+  }
+  /* Color/shape of close button cross */
+  .bm-cross {
+    background: #bdc3c7;
+  }
+  /* Sidebar wrapper styles Note: Beware of modifying this element as it can break the animations - you should not need to touch it in most cases */
+  .bm-menu-wrap {
+    position: fixed;
+    height: 100%;
+    top: 90px;
+    width: 80px !important;
+  }
+  /* General sidebar styles */
+  .bm-menu {
+    background: #ccc;
+    padding: 0;
+    font-size: 1.15em;
+  }
+  .bm-item-list img {
+    width: 50px;
+    border-radius: 10px;
+    border: 1px solid #000;
+   /* padding: 5px;
+    */
+    background: #fff;
+  }
+  .bm-item-list a {
+    display: block;
+    margin-bottom: 10px;
+  }
+  /* Morph shape necessary with bubble or elastic */
+  .bm-morph-shape {
+    fill: #373a47;
+  }
+  /* Wrapper for item list */
+  .bm-item-list {
+    color: #b8b7ad;
+   /* padding: 0.8em;
+    */
+  }
+  /* Individual item */
+  .bm-item {
+    display: inline-block;
+  }
+  /* Styling of overlay */
+  .bm-overlay {
+    background: rgba(0, 0, 0, 0.3);
+  }
+  .float-right {
+    float: right;
+  }
+  .main-canvas-container {
+    width: 80%;
+    margin-left: 10%;
+    border: 1px solid red;
+   /* margin-left: 20%;
+    background: url('./images/main-img.jpg');
+    */
+  }
+  @media only screen and (max-width: 1440px) {
+    .main-canvas-container {
+        max-width: 100%!important;
+   }
+  }
+  

@@ -62,17 +62,16 @@ export class AppComponent implements OnInit {
   }
 
   changeFontFamily() {
-    console.log("ff")
     // this.selectedFontSize = size;
     //console.log(this.selectedFontSize)
     // this.setActiveProp('fontSize', this.selectedFontSize);
   }
 
   readJSONData() {
-    console.log(this.data);
+    //console.log(this.data);
     const pKeysCount = Object.keys(this.data).filter((key) => key.startsWith("p")).length;
     this.addnewpage(pKeysCount);
-    console.log(pKeysCount);
+    //console.log(pKeysCount);
   }
 
   addnewpage(pagecount: any) {
@@ -90,7 +89,40 @@ export class AppComponent implements OnInit {
     var images = pagedata.images;
     for (var i = 0; i < images.length; i++) {
       this.loadImage(images[i]);
+      this.loadText(images[i])
     }
+  }
+
+  loadText(textData: any) {
+
+    if(textData.type == 'rich_text') {
+
+      for (let i = 0; i < textData.text.length; i++) {
+        const textObj = textData.text[i];
+        
+        for (let j = 0; j < textObj.lines.length; j++) {
+          const textValue = textObj.lines[j];
+      
+          for (let k = 0; k < textValue.textSpans.length; k++) {
+            console.log(textValue.textSpans[k].text);
+            const text = new fabric.Textbox(textValue.textSpans[k].text, {
+              left: 100,
+              top: 100,
+              fontFamily: textValue.textSpans[k].font,
+              fontSize: textValue.textSpans[k].fontSize,
+              fill: textValue.textSpans[k].color,
+              width: 200, 
+              textAlign: 'center'
+            });
+        
+            this.canvas.add(text);
+            this.canvas.setActiveObject(text);
+            this.canvas.renderAll();
+          }
+        }
+      }
+    }
+
   }
   
   // addImage(imageData: any) {
@@ -102,6 +134,7 @@ export class AppComponent implements OnInit {
   //     }
 
   loadImage(imageData: any) {
+    //console.log(imageData.type);
     const imageUrl = imageData.sid;
     if(!imageUrl) return;
     var lcanvas = this.canvas;

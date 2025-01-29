@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 //import { RouterOutlet } from '@angular/router';
-import * as fabric from 'fabric';
-import * as jsonData from '../assets/design-sample-1 (1).json';
+//import * as fabric from 'fabric';
+import { fabric } from 'fabric';
+import * as jsonData from '../assets/design-sample-1.json';
 declare var $: any;
 
 @Component({
@@ -104,6 +105,8 @@ export class AppComponent implements OnInit {
     const imageUrl = imageData.sid;
     if(!imageUrl) return;
     var lcanvas = this.canvas;
+
+
   /*  console.log("https://www.prettyorange.de/imgbase/img/?sid="+imageUrl);
     
   //   fabric.Image.fromURL('http://fabricjs.com/assets/pug_small.jpg', (myImg: any) => {
@@ -137,7 +140,10 @@ export class AppComponent implements OnInit {
     img.src = "https://www.prettyorange.de/imgbase/img/?sid="+imageUrl;
 */
     // Add image to canvas using Fabric.js
-    fabric.FabricImage.fromURL("https://www.prettyorange.de/imgbase/img/?sid="+imageUrl).then(function (img) {
+    
+    
+    
+    /*fabric.FabricImage.fromURL("https://www.prettyorange.de/imgbase/img/?sid="+imageUrl).then(function (img) {
       img.set({
         centeredRotation: true,
         centeredScaling: true,
@@ -149,9 +155,23 @@ export class AppComponent implements OnInit {
       });
       img.scaleToWidth(imageData.size);
       lcanvas.add(img);
+      //lcanvas.moveTo(img, imageData.order);
+      lcanvas.renderAll();
+    });*/
+
+    fabric.Image.fromURL("https://www.prettyorange.de/imgbase/img/?sid="+imageUrl, (img) => {
+      img.set({
+        left:  imageData.x,
+        top: imageData.y,
+        scaleX: imageData.aspect / 3,
+        scaleY: imageData.aspect / 3,
+        selectable: true // Allow selection and movement
+      });
+      img.scaleToWidth(imageData.size);
+      lcanvas.add(img);
       lcanvas.moveTo(img, imageData.order);
       lcanvas.renderAll();
-    });
+    }, { crossOrigin: 'anonymous' }); // Ensure cross-origin compatibility
   }
 
   addCanvasToPage(dupflag, pageid) {
@@ -167,8 +187,12 @@ export class AppComponent implements OnInit {
         this.addNewCanvas();
         if (dupflag) {
           var currentcanvasjson = this.canvasarray[rc + dupcount].toDatalessJSON();
-          this.canvas.loadFromJSON(currentcanvasjson);
-          this.canvas.renderAll();
+          //this.canvas.loadFromJSON(currentcanvasjson);
+          //this.canvas.renderAll();
+          this.canvas.loadFromJSON(currentcanvasjson, () => {
+            this.canvas.renderAll(); // Ensure the canvas updates after loading
+            console.log("Canvas loaded successfully!");
+          });
           dupcount++;
         }
         $("#page" + this.pageindex).append("</tr></table>");
@@ -330,6 +354,8 @@ export class AppComponent implements OnInit {
     });
 
     this.canvas.add(text);
+    this.canvas.setActiveObject(text);
+    this.canvas.renderAll();
   }
 }
 // export class AppComponent {

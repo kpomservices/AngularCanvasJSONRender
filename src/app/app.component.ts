@@ -1,7 +1,7 @@
-import { Component, OnInit  } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 //import { RouterOutlet } from '@angular/router';
 import * as fabric from 'fabric';
-import * as jsonData from '../assets/design-sample-1.json';
+import * as jsonData from '../assets/design-sample-1 (1).json';
 declare var $: any;
 
 @Component({
@@ -9,7 +9,6 @@ declare var $: any;
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
-
 export class AppComponent implements OnInit {
   canvas!: fabric.Canvas;
   data: any = jsonData;
@@ -20,29 +19,34 @@ export class AppComponent implements OnInit {
   canvasarray = [];
   canvasindex: number = 0;
   currentcanvasid: number = 0;
+  // DPI = 300;
+  // DPIMultiplier = 1;
+  // A6
   canvassize: any = {
     width: 1000,
-    height: 1000 
+    height: 1000
   };
-  color : string = "#000";
+  color: string = "red";
   font: any = 'Roboto';
+  //font: { family: string } = { family: 'Roboto' };
+
   fontSizes = [10, 12, 14, 16, 18, 20, 24, 28, 32, 36, 40]; // List of font sizes
   selectedFontSize = 16; // Default font size
 
-  objProps = new Map < string,
-    any > ();
-    objPropKeys: Array < string > = ['canvasFill', 'canvasImage', 'id', 'hue', 'contrast', 'sharpen', 'blurimg', 'brightness', 'saturation', 'opacity', 'fill', 'fontSize', 'lineHeight', 'charSpacing', 'setrotate', 'fontWeight', 'fontStyle', 'textAlign', 'fontFamily', 'strokeWidth', 'TextDecoration', 'strokeDash', 'strokeGap', 'zoomPercent', 'textoffsetX', 'textBrightness', 'catg', 'catgname'];
+  objProps = new Map<string,
+    any>();
+  objPropKeys: Array<string> = ['canvasFill', 'canvasImage', 'id', 'hue', 'contrast', 'sharpen', 'blurimg', 'brightness', 'saturation', 'opacity', 'fill', 'fontSize', 'lineHeight', 'charSpacing', 'setrotate', 'fontWeight', 'fontStyle', 'textAlign', 'fontFamily', 'strokeWidth', 'TextDecoration', 'strokeDash', 'strokeGap', 'zoomPercent', 'textoffsetX', 'textBrightness', 'catg', 'catgname'];
 
   ngOnInit() {
-     this.readJSONData();
+    this.readJSONData();
   }
 
   openLeftNav() {
     $('#leftsidenav').css("width", "100px");
-}
+  }
 
   openRightNav() {
-      $('#rightsidenav').css("width", "100px");
+    $('#rightsidenav').css("width", "100px");
   }
 
   changeFontSize(size: number) {
@@ -51,116 +55,198 @@ export class AppComponent implements OnInit {
     this.setActiveProp('fontSize', this.selectedFontSize);
   }
 
-
-
-  changeFontFamily(event: any) {
+  selectFontFamily(event: any) {
     this.font = event.family;
     this.setActiveProp('fontFamily', event.family);
   }
 
-  changeTextColor(event: any) {
-    this.color = event;
-    this.setActiveProp('fill', event);
+  changeFontFamily() {
+    console.log("ff")
+    // this.selectedFontSize = size;
+    //console.log(this.selectedFontSize)
+    // this.setActiveProp('fontSize', this.selectedFontSize);
   }
 
   readJSONData() {
-     console.log(this.data);
-     const pKeysCount = Object.keys(this.data).filter((key) => key.startsWith("p")).length;
-     this.addnewpage(pKeysCount);
-     console.log(pKeysCount);
+    console.log(this.data);
+    const pKeysCount = Object.keys(this.data).filter((key) => key.startsWith("p")).length;
+    this.addnewpage(pKeysCount);
+    console.log(pKeysCount);
   }
 
-  addnewpage(page: any) {
-      for (var i = 0; i < page; i++) {
-        this.pageindex = i;
-        var style = "";
-        $("#canvaspages").append("<div class='page' id='page" + this.pageindex + "'></div></br>");
-        this.addCanvasToPage(false, i);
-      }
+  addnewpage(pagecount: any) {
+    for (var i = 0; i < pagecount; i++) {
+      this.pageindex = i;
+      var style = "";
+      $("#canvaspages").append("<div class='page' id='page" + this.pageindex + "'></div></br>");
+      this.addCanvasToPage(false, i);
+      this.addImage(i);
+    }
   }
 
-addCanvasToPage(dupflag, pageid) {
+  addImage(pagenumber: any) {
+    var pagedata = this.data["p"+(pagenumber+1)];
+    var images = pagedata.images;
+    for (var i = 0; i < images.length; i++) {
+      this.loadImage(images[i]);
+    }
+  }
+  
+  // addImage(imageData: any) {
+  //   //const imageUrl = "https://www.prettyorange.de/imgbase/img/?sid="+imageData;
+  //       fabric.Image.fromURL('https://example.com/image.png', (img) => {
+  //     img.scale(0.5); // Scale the image
+  //     this.canvas.add(img);
+  //   }, { crossOrigin: 'anonymous' }); // Pass options as the third argument
+  //     }
+
+  loadImage(imageData: any) {
+    const imageUrl = imageData.sid;
+    if(!imageUrl) return;
+    var lcanvas = this.canvas;
+  /*  console.log("https://www.prettyorange.de/imgbase/img/?sid="+imageUrl);
+    
+  //   fabric.Image.fromURL('http://fabricjs.com/assets/pug_small.jpg', (myImg: any) => {
+  //     //i create an extra var for to change some image properties
+  //     var img1 = myImg.set({ left: 0, top: 0 ,width:150,height:150});
+  //     this.canvas.add(img1); 
+  //    }, {
+  //     crossOrigin: 'anonymous',
+  //  });
+
+    const img = new Image()
+
+    img.onload = () => { 
+        const imgObj = new fabric.Image(img, {
+            centeredRotation: true,
+            centeredScaling: true,
+            scaleX: imageData.aspect / 3,
+            scaleY: imageData.aspect / 3,
+            perPixelTargetFind: false,
+            left: imageData.left,
+            top: imageData.top
+        });        
+        imgObj.scaleToWidth(imageData.size);
+        lcanvas.add(imgObj);
+    }
+
+    // if (crossOrigin) { 
+        img.crossOrigin = "anonymous";
+    // }
+
+    img.src = "https://www.prettyorange.de/imgbase/img/?sid="+imageUrl;
+*/
+    // Add image to canvas using Fabric.js
+    fabric.FabricImage.fromURL("https://www.prettyorange.de/imgbase/img/?sid="+imageUrl).then(function (img) {
+      img.set({
+        centeredRotation: true,
+        centeredScaling: true,
+        scaleX: imageData.aspect / 3,
+        scaleY: imageData.aspect / 3,
+        // perPixelTargetFind: false,
+        left: imageData.left,
+        top: imageData.top
+      });
+      img.scaleToWidth(imageData.size);
+      lcanvas.add(img);
+      lcanvas.moveTo(img, imageData.order);
+      lcanvas.renderAll();
+    });
+  }
+
+  addCanvasToPage(dupflag, pageid) {
     let rows = 1,
-        cols = 1;
+      cols = 1;
     $('.deletecanvas').css('display', 'block');
     var rc = rows * cols * parseInt(pageid);
     var dupcount = 0;
     var jsonarrcount = 1;
     for (var i = 1; i <= rows; i++) {
-        $("#page" + this.pageindex).append("<table><tr>");
-        for (var j = 1; j <= cols; j++) {
-            this.addNewCanvas();
-            if (dupflag) {
-                var currentcanvasjson = this.canvasarray[rc + dupcount].toDatalessJSON();
-                this.canvas.loadFromJSON(currentcanvasjson);
-                this.canvas.renderAll();
-                dupcount++;
-            }
-            $("#page" + this.pageindex).append("</tr></table>");
+      $("#page" + this.pageindex).append("<table><tr>");
+      for (var j = 1; j <= cols; j++) {
+        this.addNewCanvas();
+        if (dupflag) {
+          var currentcanvasjson = this.canvasarray[rc + dupcount].toDatalessJSON();
+          this.canvas.loadFromJSON(currentcanvasjson);
+          this.canvas.renderAll();
+          dupcount++;
         }
+        $("#page" + this.pageindex).append("</tr></table>");
+      }
     }
     this.initEvents();
-}
+  }
 
-initEvents() {
-  var self = this;
-  $(".divcanvas").unbind('click').on('click', function(e) {
-    e.preventDefault();
-    self.selectCanvas('divcanvas' + $(this).data('id'));
-});
+  initEvents() {
+    var self = this;
+    // $(".divcanvas").unbind('click').on('click', function (e) {
+    //   e.preventDefault();
+    //   self.selectCanvas('divcanvas' + $(this).data('id'));
+    // });
 
-}
-initCanvasEvents() {
-  var self = this;
-  $('.canvas-container').unbind('click').on('click', function(e) {
+  }
+  initCanvasEvents() {
+    var self = this;
+    $('.canvas-container').unbind('click').on('click', function (e) {
       e.stopPropagation();
-  });
+    });
 
-  $(".divcanvas").mousedown(function(e) {
-      e.stopImmediatePropagation();
-      self.selectCanvas('divcanvas' + $(this).data('id'));
-  });
-}
+    // $(".divcanvas").mousedown(function (e) {
+    //   e.stopImmediatePropagation();
+    //   self.selectCanvas('divcanvas' + $(this).data('id'));
+    // });
+  }
 
-setActiveProp(name, value) {
-  var object = this.canvas.getActiveObject();
-  if (!object) return;
-  object.set(name, value).setCoords();
-  this.canvas.renderAll();
-}
+  setFontFamily() {
+    this.setActiveProp('fontFamily', this.objProps.get('fontFamily'));
+    $('#fontselect').css('color', 'white');
+  }
 
-selectCanvas(id: string) {
-  
-  id = id.replace("divcanvas", "");
-  if (id) {
+  setFontSize() {
+    this.setActiveProp('fontSize', this.objProps.get('fontSize'));
+  }
+
+  setActiveProp(name, value) {
+    var object = this.canvas.getActiveObject();
+    if (!object) return;
+    object.set(name, value).setCoords();
+    this.canvas.renderAll();
+  }
+
+  selectCanvas(id: string) {
+
+    id = id.replace("divcanvas", "");
+    if (id) {
       var elem = document.getElementsByClassName('canvas-container')[id];
-  }
-  if (this.currentcanvasid == parseInt(id)) return;
+    }
+    if (this.currentcanvasid == parseInt(id)) return;
 
-  //this.savestateaction = true;
+    //this.savestateaction = true;
 
-  for (var i = 0, j = 0; i < this.canvasindex; i++) {
+    for (var i = 0, j = 0; i < this.canvasindex; i++) {
       $("#canvas" + i).css("box-shadow", "");
-  }
-  $("#canvas" + id).css("box-shadow", "3px 3px 3px #888888");
-  if (this.currentcanvasid == parseInt(id)) return;
+    }
+    $("#canvas" + id).css("box-shadow", "3px 3px 3px #888888");
+    if (this.currentcanvasid == parseInt(id)) return;
 
-  this.currentcanvasid = parseInt(id);
-  var tempcanvas = this.canvasarray[parseInt(id)];
-  if (tempcanvas) this.canvas = tempcanvas;
+    this.currentcanvasid = parseInt(id);
+    var tempcanvas = this.canvasarray[parseInt(id)];
+    if (tempcanvas) this.canvas = tempcanvas;
 
-  var obj = this.canvas.getActiveObject();
-  if (obj)
+    var obj = this.canvas.getActiveObject();
+    if (obj)
       this.canvas.setActiveObject(obj);
 
-  this.canvas.renderAll();
-}
+    this.canvas.renderAll();
+  }
 
-addNewCanvas() {
-  console.log(this.canvasindex)
+  addNewCanvas() {
+    console.log(this.canvasindex)
     $("#page" + this.pageindex).append("<td style='background: white;border:1px solid #000000;' align='center' data-id='" + this.canvasindex + "' id='divcanvas" + this.canvasindex + "' (click)='selectCanvas(this.canvasindex);' (contextmenu)='selectCanvas(this.canvasindex);' (mousedown)='selectCanvas(this.canvasindex);' class='divcanvas'><div class='canvascontent' style='box-shadow:3px 3px 3px;'><canvas id='canvas" + this.canvasindex + "' class='canvas'></canvas></div></td>");
+    
     this.canvas = new fabric.Canvas('canvas' + this.canvasindex), {
-        selection: false
+      selection: false,
+      preserveObjectStacking: true
     };
     this.canvas.selectionBorderColor = 'rgba(0,153,255,0.1)';
     this.canvas.hoverCursor = 'pointer';
@@ -180,23 +266,57 @@ addNewCanvas() {
     this.currentcanvasid = this.canvasindex;
     this.canvas.calcOffset();
     this.canvas.renderAll();
-}
-
-setCanvasWidthHeight(width, height) {
-  if (width && height) {
-      for (var i = 0; i <= this.canvasindex; i++) {
-          if (!this.canvasarray[i]) continue;
-          this.canvasarray[i].setDimensions({
-              width: width,
-              height: height
-          });
-          this.canvasarray[i].calcOffset();
-          this.canvasarray[i].renderAll();
-      }
   }
-  $("#canvaswidth").val(Math.round(this.canvas.getWidth()));
-  $("#canvasheight").val(Math.round(this.canvas.getHeight()));
-}
+
+  setCanvasWidthHeight(width, height) {
+    if (width && height) {
+      for (var i = 0; i <= this.canvasindex; i++) {
+        if (!this.canvasarray[i]) continue;
+        this.canvasarray[i].setDimensions({
+          width: width,
+          height: height
+        });
+        this.canvasarray[i].calcOffset();
+        this.canvasarray[i].renderAll();
+      }
+    }
+    $("#canvaswidth").val(Math.round(this.canvas.getWidth()));
+    $("#canvasheight").val(Math.round(this.canvas.getHeight()));
+  }
+
+  // initCanvas() {
+  //   //console.log(imageUrl.sid)
+  //    //const zipcode = data.address?.details?.zipcode; // Using optional chaining to handle null/undefined safely
+  //    //console.log(zipcode);  // Output: 10001
+  //   this.canvas = new fabric.Canvas('canvas', {
+  //     width: 800,
+  //     height: 600,
+  //     backgroundColor: '#f0f0f0'
+  //   });
+  //   this.addCircle();
+  //   console.log('Data', this.data.p1);
+  //    const images = this.data.p1;
+  //    console.log(images);
+  //    const imageUrl = images.images;
+  //    for (const imageData of imageUrl) {
+  //     console.log(imageData.sid);
+  //     //this.loadImage(imageData.sid);
+  //     //this.addImage(imageData.sid);
+  //   }
+  // }
+
+
+
+  addCircle() {
+    const circle = new fabric.Circle({
+      left: 200,
+      top: 200,
+      fill: 'blue',
+      radius: 50
+    });
+    this.canvas.add(circle);
+
+  }
 
   addTextToCanvas() {
     const text = new fabric.Textbox('Hello, Fabric.js!', {
@@ -211,32 +331,6 @@ setCanvasWidthHeight(width, height) {
 
     this.canvas.add(text);
   }
-
-  // addImage(imageData: any) {
-  //   //const imageUrl = "https://www.prettyorange.de/imgbase/img/?sid="+imageData;
-  //       fabric.Image.fromURL('https://example.com/image.png', (img) => {
-  //     img.scale(0.5); // Scale the image
-  //     this.canvas.add(img);
-  //   }, { crossOrigin: 'anonymous' }); // Pass options as the third argument
-  //     }
-
-  // loadImage(imageData: any) {
-  //   const imageUrl = imageData;
-  //   console.log("https://www.prettyorange.de/imgbase/img/?sid="+imageUrl);
-
-  //   // Add image to canvas using Fabric.js
-  //   fabric.Image.fromURL("https://www.prettyorange.de/imgbase/img/?sid="+imageUrl, (img) => {
-  //     img.set({
-  //       left: imageData.left,
-  //       top: imageData.top,
-  //       width: imageData.width,
-  //       height: imageData.height,
-  //       scaleX: 1,
-  //       scaleY: 1
-  //     });
-  //     this.canvas.add(img);
-  //   });
-  // }
 }
 // export class AppComponent {
 //   title = 'fabricjs-editor';

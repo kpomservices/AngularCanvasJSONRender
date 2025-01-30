@@ -38,10 +38,6 @@ export class AppComponent implements OnInit {
     $('#leftsidenav').css("width", "100px");
   }
 
-  openRightNav() {
-    $('#rightsidenav').css("width", "100px");
-  }
-
   changeFontSize(size: number) {
     this.selectedFontSize = size;
     //console.log(this.selectedFontSize)

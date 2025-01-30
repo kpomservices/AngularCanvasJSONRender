@@ -22,8 +22,8 @@ export class AppComponent implements OnInit {
   canvasindex: number = 0;
   currentcanvasid: number = 0;
   canvassize: any = {
-    width: 1000,
-    height: 1000
+    width: 480,
+    height: 480
   };
   fillcolor: string = "#000";
   fontFamily: any = 'Roboto';

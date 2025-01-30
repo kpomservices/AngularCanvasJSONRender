@@ -190,7 +190,20 @@ export class AppComponent implements OnInit {
         scaleY: imageData.aspect / 3,
         selectable: true // Allow selection and movement
       });
-      img.scaleToWidth(imageData.size);
+      if(imageData.flip === 'horizontal') {
+        img.flipX = true;
+      } else if(imageData.flip === 'vertical') {
+        img.flipY = true;
+      }
+
+      //r=w/h;
+      var r = imageData.aspect;
+      var w = imageData.size;
+      var h = w / r;
+      if (w < h)
+        img.scaleToWidth(imageData.size);
+      else
+        img.scaleToHeight(imageData.size);
       lcanvas.add(img);
       (<any>img).order = imageData.order;
       lcanvas.moveTo(img, imageData.order);

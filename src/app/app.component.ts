@@ -10,6 +10,7 @@ declare var $: any;
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
+
 export class AppComponent implements OnInit {
   canvas!: fabric.Canvas;
   data: any = jsonData;
@@ -20,23 +21,14 @@ export class AppComponent implements OnInit {
   canvasarray = [];
   canvasindex: number = 0;
   currentcanvasid: number = 0;
-  // DPI = 300;
-  // DPIMultiplier = 1;
-  // A6
   canvassize: any = {
     width: 1000,
     height: 1000
   };
-  color: string = "red";
+  color: string = "#000";
   font: any = 'Roboto';
-  //font: { family: string } = { family: 'Roboto' };
-
   fontSizes = [10, 12, 14, 16, 18, 20, 24, 28, 32, 36, 40]; // List of font sizes
   selectedFontSize = 16; // Default font size
-
-  objProps = new Map<string,
-    any>();
-  objPropKeys: Array<string> = ['canvasFill', 'canvasImage', 'id', 'hue', 'contrast', 'sharpen', 'blurimg', 'brightness', 'saturation', 'opacity', 'fill', 'fontSize', 'lineHeight', 'charSpacing', 'setrotate', 'fontWeight', 'fontStyle', 'textAlign', 'fontFamily', 'strokeWidth', 'TextDecoration', 'strokeDash', 'strokeGap', 'zoomPercent', 'textoffsetX', 'textBrightness', 'catg', 'catgname'];
 
   ngOnInit() {
     this.readJSONData();
@@ -52,19 +44,65 @@ export class AppComponent implements OnInit {
 
   changeFontSize(size: number) {
     this.selectedFontSize = size;
-    console.log(this.selectedFontSize)
+    //console.log(this.selectedFontSize)
     this.setActiveProp('fontSize', this.selectedFontSize);
   }
 
-  selectFontFamily(event: any) {
+  changeFontFamily(event: any) {
     this.font = event.family;
     this.setActiveProp('fontFamily', event.family);
   }
 
-  changeFontFamily() {
-    // this.selectedFontSize = size;
-    //console.log(this.selectedFontSize)
-    // this.setActiveProp('fontSize', this.selectedFontSize);
+  changeTextColor(event: any) {
+    //console.log(event);
+    this.changeObjectColor('fill', event);
+  }
+
+  changeObjectColor(style: any, hex: any) {
+    let lthis = this;
+    let obj = lthis.canvas.getActiveObject();
+    if (obj) {
+      if (obj && 'paths' in obj) {
+            for (let i = 0; i < (obj.paths as fabric.Object[]).length; i++) {
+                this.setActiveStyle(style, hex, obj.paths[i]);
+            }
+        } else if (obj.type === "group") {
+            let objects = (obj as fabric.Group).getObjects();
+            for (let i = 0; i < objects.length; i++) {
+                this.setActiveStyle(style, hex, objects[i]);
+            }
+        } else this.setActiveStyle(style, hex, obj);
+    } else {
+        let grpobjs = lthis.canvas.getActiveObjects();
+        if (grpobjs) {
+          grpobjs.forEach(function(object) {
+            if (object && 'paths' in object) {
+                for (let i = 0; i < (object.paths as fabric.Object[]).length; i++) {
+                    lthis.setActiveStyle(style, hex, object.paths[i]); // Use 'object.paths[i]'
+                }
+            } else {
+                lthis.setActiveStyle(style, hex, object); // Use 'object' instead of 'obj'
+            }
+        });
+        }
+    }
+    lthis.canvas.renderAll();
+    //lthis.saveState();
+  }
+
+  setActiveStyle(styleName: any, value: any, object: any) {
+    object = object || this.canvas.getActiveObject();
+    if (!object) return;
+    if (object.setSelectionStyles && object.isEditing) {
+        var style = {};
+        style[styleName] = value;
+        object.setSelectionStyles(style);
+        object.setCoords();
+    } else {
+        object.set(styleName, value);
+    }
+    object.setCoords();
+    this.canvas.renderAll();
   }
 
   readJSONData() {
@@ -94,9 +132,7 @@ export class AppComponent implements OnInit {
   }
 
   loadText(textData: any) {
-
     if(textData.type == 'rich_text') {
-
       for (let i = 0; i < textData.text.length; i++) {
         const textObj = textData.text[i];
         
@@ -104,7 +140,7 @@ export class AppComponent implements OnInit {
           const textValue = textObj.lines[j];
       
           for (let k = 0; k < textValue.textSpans.length; k++) {
-            console.log(textValue.textSpans[k].text);
+            //console.log(textValue.textSpans[k]);
             const text = new fabric.Textbox(textValue.textSpans[k].text, {
               left: 100,
               top: 100,
@@ -112,6 +148,7 @@ export class AppComponent implements OnInit {
               fontSize: textValue.textSpans[k].fontSize,
               fill: textValue.textSpans[k].color,
               width: 200, 
+              opacity:textValue.textSpans[k].opacity,
               textAlign: 'center'
             });
         
@@ -122,75 +159,13 @@ export class AppComponent implements OnInit {
         }
       }
     }
-
   }
-  
-  // addImage(imageData: any) {
-  //   //const imageUrl = "https://www.prettyorange.de/imgbase/img/?sid="+imageData;
-  //       fabric.Image.fromURL('https://example.com/image.png', (img) => {
-  //     img.scale(0.5); // Scale the image
-  //     this.canvas.add(img);
-  //   }, { crossOrigin: 'anonymous' }); // Pass options as the third argument
-  //     }
 
-  loadImage(imageData: any) {
+loadImage(imageData: any) {
     //console.log(imageData.type);
     const imageUrl = imageData.sid;
     if(!imageUrl) return;
     var lcanvas = this.canvas;
-
-
-  /*  console.log("https://www.prettyorange.de/imgbase/img/?sid="+imageUrl);
-    
-  //   fabric.Image.fromURL('http://fabricjs.com/assets/pug_small.jpg', (myImg: any) => {
-  //     //i create an extra var for to change some image properties
-  //     var img1 = myImg.set({ left: 0, top: 0 ,width:150,height:150});
-  //     this.canvas.add(img1); 
-  //    }, {
-  //     crossOrigin: 'anonymous',
-  //  });
-
-    const img = new Image()
-
-    img.onload = () => { 
-        const imgObj = new fabric.Image(img, {
-            centeredRotation: true,
-            centeredScaling: true,
-            scaleX: imageData.aspect / 3,
-            scaleY: imageData.aspect / 3,
-            perPixelTargetFind: false,
-            left: imageData.left,
-            top: imageData.top
-        });        
-        imgObj.scaleToWidth(imageData.size);
-        lcanvas.add(imgObj);
-    }
-
-    // if (crossOrigin) { 
-        img.crossOrigin = "anonymous";
-    // }
-
-    img.src = "https://www.prettyorange.de/imgbase/img/?sid="+imageUrl;
-*/
-    // Add image to canvas using Fabric.js
-    
-    
-    
-    /*fabric.FabricImage.fromURL("https://www.prettyorange.de/imgbase/img/?sid="+imageUrl).then(function (img) {
-      img.set({
-        centeredRotation: true,
-        centeredScaling: true,
-        scaleX: imageData.aspect / 3,
-        scaleY: imageData.aspect / 3,
-        // perPixelTargetFind: false,
-        left: imageData.left,
-        top: imageData.top
-      });
-      img.scaleToWidth(imageData.size);
-      lcanvas.add(img);
-      //lcanvas.moveTo(img, imageData.order);
-      lcanvas.renderAll();
-    });*/
 
     fabric.Image.fromURL("https://www.prettyorange.de/imgbase/img/?sid="+imageUrl, (img) => {
       img.set({
@@ -220,47 +195,27 @@ export class AppComponent implements OnInit {
         this.addNewCanvas();
         if (dupflag) {
           var currentcanvasjson = this.canvasarray[rc + dupcount].toDatalessJSON();
-          //this.canvas.loadFromJSON(currentcanvasjson);
-          //this.canvas.renderAll();
           this.canvas.loadFromJSON(currentcanvasjson, () => {
             this.canvas.renderAll(); // Ensure the canvas updates after loading
-            console.log("Canvas loaded successfully!");
+            //console.log("Canvas loaded successfully!");
           });
           dupcount++;
         }
         $("#page" + this.pageindex).append("</tr></table>");
       }
     }
-    this.initEvents();
   }
 
-  initEvents() {
-    var self = this;
-    // $(".divcanvas").unbind('click').on('click', function (e) {
-    //   e.preventDefault();
-    //   self.selectCanvas('divcanvas' + $(this).data('id'));
-    // });
-
-  }
   initCanvasEvents() {
     var self = this;
     $('.canvas-container').unbind('click').on('click', function (e) {
       e.stopPropagation();
     });
 
-    // $(".divcanvas").mousedown(function (e) {
-    //   e.stopImmediatePropagation();
-    //   self.selectCanvas('divcanvas' + $(this).data('id'));
-    // });
-  }
-
-  setFontFamily() {
-    this.setActiveProp('fontFamily', this.objProps.get('fontFamily'));
-    $('#fontselect').css('color', 'white');
-  }
-
-  setFontSize() {
-    this.setActiveProp('fontSize', this.objProps.get('fontSize'));
+    $(".divcanvas").mousedown(function (e) {
+      e.stopImmediatePropagation();
+      self.selectCanvas('divcanvas' + $(this).data('id'));
+    });
   }
 
   setActiveProp(name, value) {
@@ -270,15 +225,13 @@ export class AppComponent implements OnInit {
     this.canvas.renderAll();
   }
 
-  selectCanvas(id: string) {
+ selectCanvas(id: string) {
 
     id = id.replace("divcanvas", "");
     if (id) {
       var elem = document.getElementsByClassName('canvas-container')[id];
     }
     if (this.currentcanvasid == parseInt(id)) return;
-
-    //this.savestateaction = true;
 
     for (var i = 0, j = 0; i < this.canvasindex; i++) {
       $("#canvas" + i).css("box-shadow", "");
@@ -298,9 +251,7 @@ export class AppComponent implements OnInit {
   }
 
   addNewCanvas() {
-    console.log(this.canvasindex)
     $("#page" + this.pageindex).append("<td style='background: white;border:1px solid #000000;' align='center' data-id='" + this.canvasindex + "' id='divcanvas" + this.canvasindex + "' (click)='selectCanvas(this.canvasindex);' (contextmenu)='selectCanvas(this.canvasindex);' (mousedown)='selectCanvas(this.canvasindex);' class='divcanvas'><div class='canvascontent' style='box-shadow:3px 3px 3px;'><canvas id='canvas" + this.canvasindex + "' class='canvas'></canvas></div></td>");
-    
     this.canvas = new fabric.Canvas('canvas' + this.canvasindex), {
       selection: false,
       preserveObjectStacking: true
@@ -308,15 +259,11 @@ export class AppComponent implements OnInit {
     this.canvas.selectionBorderColor = 'rgba(0,153,255,0.1)';
     this.canvas.hoverCursor = 'pointer';
     this.canvasarray.push(this.canvas);
-
     let width = this.canvassize.width;
     let height = this.canvassize.height;
-
     $('#canWidth').text(Math.round(width));
     $('#canHeight').text(Math.round(height));
-
     $('#cantype').text("pixels");
-
     this.canvasindex++;
     this.setCanvasWidthHeight(width * this.canvasScale, height * this.canvasScale);
     this.initCanvasEvents();
@@ -341,40 +288,6 @@ export class AppComponent implements OnInit {
     $("#canvasheight").val(Math.round(this.canvas.getHeight()));
   }
 
-  // initCanvas() {
-  //   //console.log(imageUrl.sid)
-  //    //const zipcode = data.address?.details?.zipcode; // Using optional chaining to handle null/undefined safely
-  //    //console.log(zipcode);  // Output: 10001
-  //   this.canvas = new fabric.Canvas('canvas', {
-  //     width: 800,
-  //     height: 600,
-  //     backgroundColor: '#f0f0f0'
-  //   });
-  //   this.addCircle();
-  //   console.log('Data', this.data.p1);
-  //    const images = this.data.p1;
-  //    console.log(images);
-  //    const imageUrl = images.images;
-  //    for (const imageData of imageUrl) {
-  //     console.log(imageData.sid);
-  //     //this.loadImage(imageData.sid);
-  //     //this.addImage(imageData.sid);
-  //   }
-  // }
-
-
-
-  addCircle() {
-    const circle = new fabric.Circle({
-      left: 200,
-      top: 200,
-      fill: 'blue',
-      radius: 50
-    });
-    this.canvas.add(circle);
-
-  }
-
   addTextToCanvas() {
     const text = new fabric.Textbox('Hello, Fabric.js!', {
       left: 100,
@@ -391,6 +304,3 @@ export class AppComponent implements OnInit {
     this.canvas.renderAll();
   }
 }
-// export class AppComponent {
-//   title = 'fabricjs-editor';
-// }

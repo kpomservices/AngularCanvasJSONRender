@@ -22,21 +22,22 @@
                 <div class="col">
                    <ul class="toolbar list-group list-group-horizontal">
                      <div class="textOptions">
-                     <label for="fontSizePicker">Font Size:</label>
-                     <select
+                     <label for="fontSizePicker"> Font Size: &nbsp;</label>
+                     <input type="text" style="width: 50px;" [(ngModel)]="fontSize" (keyup.enter)="changeFontSize(fontSize)">&nbsp;px
+                     <!-- <select
                        id="fontSizePicker"
                        [(ngModel)]="selectedFontSize"
                        (change)="changeFontSize(selectedFontSize)"
                      >
                        <option *ngFor="let size of fontSizes" [value]="size">{{ size }}px</option>
-                     </select>
+                     </select> -->
                    </div>
                    <div class="textOptions">
-                   <input style="width: 50px;" [cpPosition]="'bottom'"  [(colorPicker)]="color" [style.background]="color" (colorPickerChange)="changeTextColor($event)"   />
+                   <input style="width: 35px;border: none;padding: 4px;border-radius: 5px;" [cpPosition]="'bottom'"  [(colorPicker)]="fillcolor" [style.background]="fillcolor" (colorPickerChange)="changeTextColor($event)"   />
                  </div>
                    <div class="textOptions">
-                   <div style="border: 1px solid rgb(41, 34, 34);padding: 5px;" [(fontPicker)]="font" [fpWidth]="'320px'" [fpSizeSelect]="false" [fpStyleSelect]="false" [fpPosition]="'bottom'" (fontPickerChange)="changeFontFamily($event)">
-                     {{font}}
+                   <div style="border: 1px solid rgb(41, 34, 34);padding: 4px;border-radius: 5px;" [(fontPicker)]="fontFamily" [fpWidth]="'320px'" [fpSizeSelect]="false" [fpStyleSelect]="false" [fpPosition]="'bottom'" (fontPickerChange)="changeFontFamily($event)">
+                     {{fontFamily}}
                    </div>
                  </div>
                   </ul>

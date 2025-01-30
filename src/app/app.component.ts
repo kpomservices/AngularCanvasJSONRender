@@ -25,10 +25,10 @@ export class AppComponent implements OnInit {
     width: 1000,
     height: 1000
   };
-  color: string = "#000";
-  font: any = 'Roboto';
+  fillcolor: string = "#000";
+  fontFamily: any = 'Roboto';
   fontSizes = [10, 12, 14, 16, 18, 20, 24, 28, 32, 36, 40]; // List of font sizes
-  selectedFontSize = 16; // Default font size
+  fontSize = 16; // Default font size
 
   ngOnInit() {
     this.readJSONData();
@@ -38,20 +38,39 @@ export class AppComponent implements OnInit {
     $('#leftsidenav').css("width", "100px");
   }
 
+  // changeFontSize(size: number) {
+  //   this.selectedFontSize = size;
+  //   //console.log(this.selectedFontSize)
+  //   this.setActiveProp('fontSize', this.selectedFontSize);
+  // }
+
+  // changeFontFamily(event: any) {
+  //   this.font = event.family;
+  //   this.setActiveProp('fontFamily', event.family);
+  // }
+
+  // changeTextColor(event: any) {
+  //   //console.log(event);
+  //   this.changeObjectColor('fill', event);
+  // }
+
+
   changeFontSize(size: number) {
-    this.selectedFontSize = size;
+    this.fontSize = Math.round(size);
     //console.log(this.selectedFontSize)
-    this.setActiveProp('fontSize', this.selectedFontSize);
+    this.setActiveProp('fontSize', this.fontSize);
   }
 
   changeFontFamily(event: any) {
-    this.font = event.family;
+    this.fontFamily = event.family;
     this.setActiveProp('fontFamily', event.family);
+    //this.props.fontFamily = this.font;
   }
 
   changeTextColor(event: any) {
     //console.log(event);
     this.changeObjectColor('fill', event);
+    this.fillcolor = event;
   }
 
   changeObjectColor(style: any, hex: any) {
@@ -224,9 +243,54 @@ export class AppComponent implements OnInit {
       e.stopImmediatePropagation();
       self.selectCanvas('divcanvas' + $(this).data('id'));
     });
+    this.canvas.on('mouse:down', (event) => this.updateProps(event));
+    //this.canvas.on('mouse:move', (event) => this.updateProps(event));
+    this.canvas.on('object:selected', (event) => this.updateProps(event));
   }
 
-  setActiveProp(name, value) {
+  getFill() {
+    this.fillcolor = this.getActiveStyle('fill', null);
+  }
+  
+  getFontSize() {
+    this.fontSize = Math.round(this.getActiveStyle('fontSize', null));
+    //console.log(this.fontSize)
+  }
+  
+  getFontFamily() {
+    this.fontFamily = this.getActiveStyle('fontFamily', null);
+  }
+  
+  
+  getActiveStyle(styleName: any, object: any) {
+    object = object || this.canvas.getActiveObject();
+    if (!object) return '';
+    return (object.getSelectionStyles && object.isEditing) ? (object.getSelectionStyles()[styleName] || '') : (object[styleName] || '');
+  }
+  
+  getActiveProp(name: any) {
+    var object = this.canvas.getActiveObject();
+    if (!object) return '';
+    return object[name] || '';
+  }
+  
+  updateProps(e: any) {
+    let selectedObject = e.target;
+    if (selectedObject) {
+      switch (selectedObject.type) {
+        case 'textbox':
+          this.getFill();
+          this.getFontSize();
+          this.getFontFamily();
+          break;
+        case 'image':
+          console.log('image');
+          break;
+      }
+    }
+  }
+
+  setActiveProp(name: any, value: any) {
     var object = this.canvas.getActiveObject();
     if (!object) return;
     object.set(name, value).setCoords();

@@ -59,28 +59,28 @@ export class AppComponent implements OnInit {
     let obj = lthis.canvas.getActiveObject();
     if (obj) {
       if (obj && 'paths' in obj) {
-            for (let i = 0; i < (obj.paths as fabric.Object[]).length; i++) {
-                this.setActiveStyle(style, hex, obj.paths[i]);
-            }
-        } else if (obj.type === "group") {
-            let objects = (obj as fabric.Group).getObjects();
-            for (let i = 0; i < objects.length; i++) {
-                this.setActiveStyle(style, hex, objects[i]);
-            }
-        } else this.setActiveStyle(style, hex, obj);
-    } else {
-        let grpobjs = lthis.canvas.getActiveObjects();
-        if (grpobjs) {
-          grpobjs.forEach(function(object) {
-            if (object && 'paths' in object) {
-                for (let i = 0; i < (object.paths as fabric.Object[]).length; i++) {
-                    lthis.setActiveStyle(style, hex, object.paths[i]); // Use 'object.paths[i]'
-                }
-            } else {
-                lthis.setActiveStyle(style, hex, object); // Use 'object' instead of 'obj'
-            }
-        });
+        for (let i = 0; i < (obj.paths as fabric.Object[]).length; i++) {
+          this.setActiveStyle(style, hex, obj.paths[i]);
         }
+      } else if (obj.type === "group") {
+        let objects = (obj as fabric.Group).getObjects();
+        for (let i = 0; i < objects.length; i++) {
+          this.setActiveStyle(style, hex, objects[i]);
+        }
+      } else this.setActiveStyle(style, hex, obj);
+    } else {
+      let grpobjs = lthis.canvas.getActiveObjects();
+      if (grpobjs) {
+        grpobjs.forEach(function (object) {
+          if (object && 'paths' in object) {
+            for (let i = 0; i < (object.paths as fabric.Object[]).length; i++) {
+              lthis.setActiveStyle(style, hex, object.paths[i]); // Use 'object.paths[i]'
+            }
+          } else {
+            lthis.setActiveStyle(style, hex, object); // Use 'object' instead of 'obj'
+          }
+        });
+      }
     }
     lthis.canvas.renderAll();
     //lthis.saveState();
@@ -90,12 +90,12 @@ export class AppComponent implements OnInit {
     object = object || this.canvas.getActiveObject();
     if (!object) return;
     if (object.setSelectionStyles && object.isEditing) {
-        var style = {};
-        style[styleName] = value;
-        object.setSelectionStyles(style);
-        object.setCoords();
+      var style = {};
+      style[styleName] = value;
+      object.setSelectionStyles(style);
+      object.setCoords();
     } else {
-        object.set(styleName, value);
+      object.set(styleName, value);
     }
     object.setCoords();
     this.canvas.renderAll();
@@ -119,7 +119,7 @@ export class AppComponent implements OnInit {
   }
 
   addImage(pagenumber: any) {
-    var pagedata = this.data["p"+(pagenumber+1)];
+    var pagedata = this.data["p" + (pagenumber + 1)];
     var images = pagedata.images;
     for (var i = 0; i < images.length; i++) {
       this.loadImage(images[i]);
@@ -128,13 +128,13 @@ export class AppComponent implements OnInit {
   }
 
   loadText(textData: any) {
-    if(textData.type == 'rich_text') {
+    if (textData.type == 'rich_text') {
       for (let i = 0; i < textData.text.length; i++) {
         const textObj = textData.text[i];
-        
+
         for (let j = 0; j < textObj.lines.length; j++) {
           const textValue = textObj.lines[j];
-      
+
           for (let k = 0; k < textValue.textSpans.length; k++) {
             //console.log(textValue.textSpans[k]);
             const text = new fabric.Textbox(textValue.textSpans[k].text, {
@@ -143,11 +143,11 @@ export class AppComponent implements OnInit {
               fontFamily: textValue.textSpans[k].font,
               fontSize: textValue.textSpans[k].fontSize,
               fill: textValue.textSpans[k].color,
-              width: 200, 
-              opacity:textValue.textSpans[k].opacity,
+              width: 200,
+              opacity: textValue.textSpans[k].opacity,
               textAlign: 'center'
             });
-        
+
             this.canvas.add(text);
             this.canvas.setActiveObject(text);
             this.canvas.renderAll();
@@ -157,15 +157,15 @@ export class AppComponent implements OnInit {
     }
   }
 
-loadImage(imageData: any) {
+  loadImage(imageData: any) {
     //console.log(imageData.type);
     const imageUrl = imageData.sid;
-    if(!imageUrl) return;
+    if (!imageUrl) return;
     var lcanvas = this.canvas;
 
-    fabric.Image.fromURL("https://www.prettyorange.de/imgbase/img/?sid="+imageUrl, (img) => {
+    fabric.Image.fromURL("https://www.prettyorange.de/imgbase/img/?sid=" + imageUrl, (img) => {
       img.set({
-        left:  imageData.x,
+        left: imageData.x,
         top: imageData.y,
         scaleX: imageData.aspect / 3,
         scaleY: imageData.aspect / 3,
@@ -173,9 +173,21 @@ loadImage(imageData: any) {
       });
       img.scaleToWidth(imageData.size);
       lcanvas.add(img);
+      (<any>img).order = imageData.order;
       lcanvas.moveTo(img, imageData.order);
       lcanvas.renderAll();
+      this.updateOrder(lcanvas);
     }, { crossOrigin: 'anonymous' }); // Ensure cross-origin compatibility
+  }
+
+  updateOrder(lcanvas) {
+    var objs = this.canvas.getObjects();
+    for (var i = 0; i < objs.length; i++) {
+      var obj = objs[i];
+      if ((<any>obj).order) {
+        lcanvas.moveTo(obj, (<any>obj).order);
+      }
+    }
   }
 
   addCanvasToPage(dupflag, pageid) {
@@ -221,7 +233,7 @@ loadImage(imageData: any) {
     this.canvas.renderAll();
   }
 
- selectCanvas(id: string) {
+  selectCanvas(id: string) {
 
     id = id.replace("divcanvas", "");
     if (id) {
@@ -254,6 +266,7 @@ loadImage(imageData: any) {
     };
     this.canvas.selectionBorderColor = 'rgba(0,153,255,0.1)';
     this.canvas.hoverCursor = 'pointer';
+    this.canvas.preserveObjectStacking = true;
     this.canvasarray.push(this.canvas);
     let width = this.canvassize.width;
     let height = this.canvassize.height;
